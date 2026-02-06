@@ -1,0 +1,97 @@
+import type { User } from '@/types/user';
+
+export const mockUser: User = {
+  id: '1',
+  email: 'jan.vanderberg@example.com',
+  username: 'janvanderberg',
+  naam: 'Jan van der Berg',
+  bio: 'Ervaren consultant met meer dan 15 jaar expertise in strategisch advies en digitale transformatie. Gespecialiseerd in het begeleiden van middelgrote en grote organisaties bij complexe veranderingsprocessen. Focus op duurzame groei, innovatie en het creëren van waarde voor stakeholders. Gepassioneerd over het verbinden van technologie en business om tastbare resultaten te behalen.',
+  kvkNumber: '12345678',
+  companyName: 'Van der Berg Consultancy',
+  profilePicture: '/profile.png',
+  logo: '/logo.png',
+  linkedinUrl: 'https://www.linkedin.com/in/janvanderberg',
+  phoneNumber: '+31 6 12345678',
+  address: {
+    city: 'Amsterdam',
+    country: 'Nederland',
+  },
+  educations: [
+    {
+      id: '1',
+      institution: 'Rotterdam School of Management',
+      degree: 'Master of Business Administration (MBA)',
+      field: 'Business Administration',
+      startDate: '2010-09',
+      endDate: '2012-06',
+    },
+    {
+      id: '2',
+      institution: 'Universiteit van Amsterdam',
+      degree: 'Bachelor Bedrijfskunde',
+      field: 'Business Administration',
+      startDate: '2006-09',
+      endDate: '2010-06',
+    },
+    {
+      id: '3',
+      institution: 'Scrum Alliance',
+      degree: 'Certified Scrum Master (CSM)',
+      startDate: '2015-03',
+    },
+  ],
+  certifications: [
+    {
+      id: '1',
+      name: 'Certified Scrum Master (CSM)',
+      issuer: 'Scrum Alliance',
+      startDate: '2015-03',
+    },
+    {
+      id: '2',
+      name: 'Project Management Professional (PMP)',
+      issuer: 'PMI',
+      startDate: '2018-05',
+    },
+  ],
+  workExperiences: [
+    {
+      id: '1',
+      company: 'TechCorp International',
+      role: 'Senior Consultant',
+      description: 'Leidinggevende rol bij digitale transformatie van legacy systemen naar cloud-gebaseerde oplossingen. Begeleiding van een team van 25 professionals en coördinatie met internationale stakeholders. Resultaat: 40% kostenreductie en verbeterde schaalbaarheid.',
+      startDate: '2022-01',
+      current: true,
+    },
+    {
+      id: '2',
+      company: 'GreenEnergy Solutions',
+      role: 'Strategy Consultant',
+      description: 'Strategisch advies voor duurzaamheidsinitiatieven en implementatie van ESG-rapportage. Ontwikkeling van roadmap voor koolstofneutraliteit in 2030. Training van managementteam en opzetten van monitoring framework.',
+      startDate: '2020-06',
+      endDate: '2021-12',
+      current: false,
+    },
+    {
+      id: '3',
+      company: 'FinanceHub BV',
+      role: 'Business Consultant',
+      description: 'Herstructurering van financiële processen en implementatie van nieuwe ERP-systemen. Begeleiding van change management traject en training van gebruikers. Focus op automatisering en efficiëntieverbetering.',
+      startDate: '2018-03',
+      endDate: '2020-05',
+      current: false,
+    },
+    {
+      id: '4',
+      company: 'RetailMax Group',
+      role: 'E-commerce Consultant',
+      description: 'Ontwikkeling van omnichannel strategie en implementatie van nieuwe e-commerce platform. Analyse van klantreis en optimalisatie van conversie. Resultaat: 60% groei in online omzet binnen eerste jaar.',
+      startDate: '2016-09',
+      endDate: '2018-02',
+      current: false,
+    },
+  ],
+  templateStyle: 'business',
+  colorTheme: 'beige',
+};
+

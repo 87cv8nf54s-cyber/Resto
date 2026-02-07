@@ -113,12 +113,24 @@
 }
 
 /* Force mobile view in iPhone mockup */
+.template-mobile-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
 .template-mobile-wrapper .lg\:hidden {
   display: block !important;
 }
 
 .template-mobile-wrapper .hidden.lg\:block {
   display: none !important;
+}
+
+.template-mobile-wrapper * {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Animation delays for hero particles */

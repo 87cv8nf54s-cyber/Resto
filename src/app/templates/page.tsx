@@ -5,19 +5,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import { BusinessTemplate } from '@/components/templates/BusinessTemplate';
-import { CreativeTemplate } from '@/components/templates/CreativeTemplate';
-import { HeroTemplate } from '@/components/templates/HeroTemplate';
-import { MinimalistTemplate } from '@/components/templates/MinimalistTemplate';
-import { PortfolioTemplate } from '@/components/templates/PortfolioTemplate';
 import { RestoTemplate } from '@/components/templates/RestoTemplate';
+import { SushiTemplate } from '@/components/templates/SushiTemplate';
 import { mockUser } from '../data/mockUser';
 import { getThemeCSSVariables } from '@/lib/themes';
 
-type TemplateType = 'creative' | 'minimalist' | 'business' | 'hero' | 'portfolio' | 'resto';
+type TemplateType = 'resto' | 'sushi';
 
 export default function TemplatesPage() {
-  const [activeTemplate, setActiveTemplate] = useState<TemplateType>('creative');
+  const [activeTemplate, setActiveTemplate] = useState<TemplateType>('resto');
   const screenRef = useRef<HTMLDivElement>(null);
   const contentWrapperRef = useRef<HTMLDivElement>(null);
   const mobileScreenRef = useRef<HTMLDivElement>(null);
@@ -31,46 +27,22 @@ export default function TemplatesPage() {
 
   const renderTemplate = () => {
     switch (activeTemplate) {
-      case 'creative':
-        return (
-          <div className="template-creative" style={style}>
-            <CreativeTemplate user={mockUser} />
-          </div>
-        );
-      case 'minimalist':
-        return (
-          <div className="template-minimalist" style={style}>
-            <MinimalistTemplate user={mockUser} />
-          </div>
-        );
-      case 'business':
-        return (
-          <div className="template-business" style={style}>
-            <BusinessTemplate user={mockUser} />
-          </div>
-        );
-      case 'hero':
-        return (
-          <div className="template-hero" style={style}>
-            <HeroTemplate user={mockUser} />
-          </div>
-        );
-      case 'portfolio':
-        return (
-          <div className="template-portfolio" style={style}>
-            <PortfolioTemplate user={mockUser} />
-          </div>
-        );
       case 'resto':
         return (
           <div className="template-resto" style={style}>
             <RestoTemplate user={mockUser} />
           </div>
         );
+      case 'sushi':
+        return (
+          <div className="template-sushi" style={style}>
+            <SushiTemplate user={mockUser} />
+          </div>
+        );
       default:
         return (
-          <div className="template-creative" style={style}>
-            <CreativeTemplate user={mockUser} />
+          <div className="template-resto" style={style}>
+            <RestoTemplate user={mockUser} />
           </div>
         );
     }
@@ -215,61 +187,6 @@ export default function TemplatesPage() {
             </h2>
             <div className="flex flex-wrap gap-3 justify-center">
               <button
-                onClick={() => setActiveTemplate('creative')}
-                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                  activeTemplate === 'creative'
-                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
-                }`}
-                aria-pressed={activeTemplate === 'creative'}
-              >
-                Creatief
-              </button>
-              <button
-                onClick={() => setActiveTemplate('minimalist')}
-                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                  activeTemplate === 'minimalist'
-                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
-                }`}
-                aria-pressed={activeTemplate === 'minimalist'}
-              >
-                Minimalist
-              </button>
-              <button
-                onClick={() => setActiveTemplate('business')}
-                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                  activeTemplate === 'business'
-                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
-                }`}
-                aria-pressed={activeTemplate === 'business'}
-              >
-                Zakelijk
-              </button>
-              <button
-                onClick={() => setActiveTemplate('hero')}
-                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                  activeTemplate === 'hero'
-                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
-                }`}
-                aria-pressed={activeTemplate === 'hero'}
-              >
-                Hero
-              </button>
-              <button
-                onClick={() => setActiveTemplate('portfolio')}
-                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                  activeTemplate === 'portfolio'
-                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
-                }`}
-                aria-pressed={activeTemplate === 'portfolio'}
-              >
-                Portfolio
-              </button>
-              <button
                 onClick={() => setActiveTemplate('resto')}
                 className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                   activeTemplate === 'resto'
@@ -279,6 +196,17 @@ export default function TemplatesPage() {
                 aria-pressed={activeTemplate === 'resto'}
               >
                 Resto Landingspage
+              </button>
+              <button
+                onClick={() => setActiveTemplate('sushi')}
+                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                  activeTemplate === 'sushi'
+                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
+                }`}
+                aria-pressed={activeTemplate === 'sushi'}
+              >
+                Sushi Template
               </button>
             </div>
           </div>
@@ -351,8 +279,27 @@ export default function TemplatesPage() {
                     }}
                   >
                     {/* Mobile Template Content */}
-                    <div ref={mobileContentWrapperRef} className="w-full" style={{ transform: 'scale(1)', transformOrigin: 'top center' }}>
-                      {renderMobileTemplate()}
+                    <div 
+                      ref={mobileContentWrapperRef} 
+                      className="w-full" 
+                      style={{ 
+                        transform: 'scale(1)', 
+                        transformOrigin: 'top center',
+                        maxWidth: '100%',
+                        overflowX: 'hidden',
+                        boxSizing: 'border-box',
+                      }}
+                    >
+                      <div 
+                        style={{ 
+                          width: '100%', 
+                          maxWidth: '100%', 
+                          overflowX: 'hidden',
+                          boxSizing: 'border-box',
+                        }}
+                      >
+                        {renderMobileTemplate()}
+                      </div>
                     </div>
                   </div>
                 </div>

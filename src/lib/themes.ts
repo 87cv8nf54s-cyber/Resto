@@ -1,5 +1,5 @@
 export type ColorTheme = "beige" | "blue" | "green" | "red" | "yellow" | "orange";
-export type TemplateStyle = "creative" | "minimalist" | "business" | "hero" | "portfolio" | "resto";
+export type TemplateStyle = "resto" | "sushi";
 
 export const colorThemes: Record<ColorTheme, {
   accent: string;

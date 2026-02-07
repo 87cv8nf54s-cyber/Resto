@@ -423,7 +423,7 @@ export function RestoTemplate({ user }: RestoTemplateProps) {
   }, [selectedCategory]);
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white overflow-x-hidden" style={{ maxWidth: '100vw', boxSizing: 'border-box' }}>
       {/* Navigation Header - Hidden on mobile when scrolled, only visible at top */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${

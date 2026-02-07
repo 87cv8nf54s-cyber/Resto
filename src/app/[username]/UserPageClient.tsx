@@ -6,13 +6,8 @@ import { apolloClient } from "@/lib/apollo-client";
 import { GET_USER_BY_SLUG } from "@/lib/queries";
 import { getThemeCSSVariables, type ColorTheme, type TemplateStyle } from "@/lib/themes";
 import type { User } from "@/types/user";
-import { CreativeTemplate } from "@/components/templates/CreativeTemplate";
-import { MinimalistTemplate } from "@/components/templates/MinimalistTemplate";
-import { BusinessTemplate } from "@/components/templates/BusinessTemplate";
-import { HeroTemplate } from "@/components/templates/HeroTemplate";
-import { PortfolioTemplate } from "@/components/templates/PortfolioTemplate";
 import { RestoTemplate } from "@/components/templates/RestoTemplate";
-import { TemplateWrapper } from "@/components/dev/TemplateWrapper";
+import { SushiTemplate } from "@/components/templates/SushiTemplate";
 
 export function UserPageClient() {
   const params = useParams();
@@ -87,7 +82,7 @@ export function UserPageClient() {
     );
   }
 
-  const templateStyle: TemplateStyle = user.templateStyle || "minimalist";
+  const templateStyle: TemplateStyle = user.templateStyle || "resto";
   const colorTheme: ColorTheme = user.colorTheme || "beige";
   const themeVariables = getThemeCSSVariables(colorTheme);
 
@@ -99,28 +94,11 @@ export function UserPageClient() {
     {} as React.CSSProperties
   );
 
-  const isDev = process.env.NODE_ENV === "development";
-
-  // In dev mode, use the wrapper with template switcher
-  if (isDev) {
-    return (
-      <TemplateWrapper 
-        user={user} 
-        initialTemplate={templateStyle}
-        colorTheme={colorTheme}
-      />
-    );
-  }
-
-  // In production, use the standard template
+  // Template component mapping
   const TemplateComponent = {
-    creative: CreativeTemplate,
-    minimalist: MinimalistTemplate,
-    business: BusinessTemplate,
-    hero: HeroTemplate,
-    portfolio: PortfolioTemplate,
     resto: RestoTemplate,
-  }[templateStyle];
+    sushi: SushiTemplate,
+  }[templateStyle] || RestoTemplate; // Fallback to RestoTemplate
 
   return (
     <div className={`template-${templateStyle}`} style={style}>

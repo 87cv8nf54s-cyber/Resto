@@ -228,58 +228,34 @@ export function SushiTemplate({ user }: SushiTemplateProps) {
         itemsByCategory[category].push(item);
       });
       
+      console.log('=== PDF Generation Debug ===');
+      console.log('Total menuItems:', menuItems.length);
       console.log('Items by category:', itemsByCategory);
       console.log('Categories:', Object.keys(itemsByCategory));
+      console.log('Categories count:', Object.keys(itemsByCategory).length);
 
-      // Add menu items by category
-      Object.keys(itemsByCategory).forEach(category => {
-        console.log(`Processing category: ${category} with ${itemsByCategory[category].length} items`);
+      // Check if we have any menu items
+      if (menuItems.length === 0) {
+        console.warn('WARNING: No menu items found!');
+        // Add a message on the second page
+        doc.setFontSize(14);
+        doc.setTextColor(100, 100, 100);
+        doc.text('Geen menu items beschikbaar', pageWidth / 2, pageHeight / 2, { align: 'center' });
+      } else {
+        // Add menu items by category
+        const categoryKeys = Object.keys(itemsByCategory);
+        console.log(`Processing ${categoryKeys.length} categories`);
         
-        if (yPosition > pageHeight - frameMargin - 30) {
-          doc.addPage();
-          yPosition = margin + 10;
-          doc.setDrawColor(0, 0, 0);
-          doc.setLineWidth(1);
-          doc.line(frameMargin, frameMargin, pageWidth - frameMargin, frameMargin);
-          doc.line(frameMargin, pageHeight - frameMargin, pageWidth - frameMargin, pageHeight - frameMargin);
-          doc.line(frameMargin, frameMargin, frameMargin, pageHeight - frameMargin);
-          doc.line(pageWidth - frameMargin, frameMargin, pageWidth - frameMargin, pageHeight - frameMargin);
-        }
-
-        // Category header - minimalist styling
-        yPosition += 12;
-        doc.setFontSize(18);
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(0, 0, 0);
-        const categoryWidth = doc.getTextWidth(category);
-        const categoryX = (pageWidth - categoryWidth) / 2;
-        doc.text(category, categoryX, yPosition);
-        yPosition += 10;
-
-        // Minimalist line under category
-        const lineY = yPosition - 3;
-        const lineStartX = categoryX - 10;
-        const lineEndX = categoryX + categoryWidth + 10;
-        doc.setDrawColor(0, 0, 0);
-        doc.setLineWidth(0.5);
-        doc.line(lineStartX, lineY, lineEndX, lineY);
-        yPosition += 8;
-
-        // Menu items
-        itemsByCategory[category].forEach(item => {
-          console.log(`Adding item: ${item.name} - ${item.price}`);
-          let spaceNeeded = 6;
-          if (item.description) {
-            doc.setFontSize(9);
-            const descriptionWidth = maxWidth - 10;
-            const splitDescription = doc.splitTextToSize(item.description, descriptionWidth);
-            spaceNeeded += splitDescription.length * 4.5;
-          }
-          spaceNeeded += 4;
-
-          if (yPosition + spaceNeeded > pageHeight - frameMargin - 10) {
+        categoryKeys.forEach((category, categoryIndex) => {
+          const categoryItems = itemsByCategory[category];
+          console.log(`[${categoryIndex + 1}/${categoryKeys.length}] Processing category: "${category}" with ${categoryItems.length} items`);
+          
+          // Check if we need a new page before adding category header
+          if (yPosition > pageHeight - frameMargin - 50) {
+            console.log(`Adding new page before category "${category}" (yPosition: ${yPosition})`);
             doc.addPage();
             yPosition = margin + 10;
+            // Redraw frame on new page
             doc.setDrawColor(0, 0, 0);
             doc.setLineWidth(1);
             doc.line(frameMargin, frameMargin, pageWidth - frameMargin, frameMargin);
@@ -288,35 +264,91 @@ export function SushiTemplate({ user }: SushiTemplateProps) {
             doc.line(pageWidth - frameMargin, frameMargin, pageWidth - frameMargin, pageHeight - frameMargin);
           }
 
-          // Item name and price
-          doc.setFontSize(11);
+          // Category header - minimalist styling
+          yPosition += 12;
+          doc.setFontSize(18);
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(0, 0, 0);
-          const priceWidth = doc.getTextWidth(item.price);
-          doc.text(item.name, margin + 5, yPosition);
-          doc.text(item.price, pageWidth - margin - priceWidth - 5, yPosition);
-          yPosition += 6;
+          const categoryWidth = doc.getTextWidth(category);
+          const categoryX = (pageWidth - categoryWidth) / 2;
+          doc.text(category, categoryX, yPosition);
+          yPosition += 10;
 
-          // Item description
-          if (item.description && item.description.trim()) {
-            doc.setFontSize(9);
-            doc.setTextColor(100, 100, 100);
-            const descriptionWidth = maxWidth - 10;
-            const splitDescription = doc.splitTextToSize(item.description, descriptionWidth);
-            doc.text(splitDescription, margin + 5, yPosition);
-            yPosition += splitDescription.length * 4.5;
+          // Minimalist line under category
+          const lineY = yPosition - 3;
+          const lineStartX = categoryX - 10;
+          const lineEndX = categoryX + categoryWidth + 10;
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.5);
+          doc.line(lineStartX, lineY, lineEndX, lineY);
+          yPosition += 8;
+
+          // Menu items
+          categoryItems.forEach((item, itemIndex) => {
+            console.log(`  [${itemIndex + 1}/${categoryItems.length}] Adding item: "${item.name}" - ${item.price} (yPosition: ${yPosition})`);
+            
+            let spaceNeeded = 6;
+            if (item.description) {
+              doc.setFontSize(9);
+              const descriptionWidth = maxWidth - 10;
+              const splitDescription = doc.splitTextToSize(item.description, descriptionWidth);
+              spaceNeeded += splitDescription.length * 4.5;
+            }
+            spaceNeeded += 4;
+
+            // Check if we need a new page
+            if (yPosition + spaceNeeded > pageHeight - frameMargin - 10) {
+              console.log(`    Adding new page for item "${item.name}" (yPosition: ${yPosition}, spaceNeeded: ${spaceNeeded})`);
+              doc.addPage();
+              yPosition = margin + 10;
+              // Redraw frame on new page
+              doc.setDrawColor(0, 0, 0);
+              doc.setLineWidth(1);
+              doc.line(frameMargin, frameMargin, pageWidth - frameMargin, frameMargin);
+              doc.line(frameMargin, pageHeight - frameMargin, pageWidth - frameMargin, pageHeight - frameMargin);
+              doc.line(frameMargin, frameMargin, frameMargin, pageHeight - frameMargin);
+              doc.line(pageWidth - frameMargin, frameMargin, pageWidth - frameMargin, pageHeight - frameMargin);
+            }
+
+            // Item name and price
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'normal');
             doc.setTextColor(0, 0, 0);
-          }
-          yPosition += 4;
-        });
-      });
+            const priceWidth = doc.getTextWidth(item.price);
+            doc.text(item.name, margin + 5, yPosition);
+            doc.text(item.price, pageWidth - margin - priceWidth - 5, yPosition);
+            yPosition += 6;
 
-      console.log(`Total pages after adding menu items: ${doc.getNumberOfPages()}`);
+            // Item description
+            if (item.description && item.description.trim()) {
+              doc.setFontSize(9);
+              doc.setTextColor(100, 100, 100);
+              const descriptionWidth = maxWidth - 10;
+              const splitDescription = doc.splitTextToSize(item.description, descriptionWidth);
+              doc.text(splitDescription, margin + 5, yPosition);
+              yPosition += splitDescription.length * 4.5;
+              doc.setTextColor(0, 0, 0);
+            }
+            yPosition += 4;
+          });
+        });
+      }
+
+      const totalPages = doc.getNumberOfPages();
+      console.log(`Total pages after adding menu items: ${totalPages}`);
+      console.log(`Total menu items processed: ${menuItems.length}`);
+      console.log(`Total categories: ${Object.keys(itemsByCategory).length}`);
+      
+      // Check if we have menu items
+      if (menuItems.length === 0) {
+        // If no menu items, add a message on the second page
+        doc.setPage(2);
+        doc.setFontSize(14);
+        doc.setTextColor(100, 100, 100);
+        doc.text('Geen menu items beschikbaar', pageWidth / 2, pageHeight / 2, { align: 'center' });
+      }
       
       // Footer on all pages (except first logo page)
-      const totalPages = doc.getNumberOfPages();
-      console.log(`Total pages: ${totalPages}`);
-      
       for (let i = 2; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
@@ -329,35 +361,19 @@ export function SushiTemplate({ user }: SushiTemplateProps) {
         );
       }
 
-      // Back button on first menu page (only if we have more than 1 page)
-      if (totalPages > 1) {
-        doc.setPage(2);
-        const buttonRadius = 12;
-        const buttonX = margin + 5;
-        const buttonY = frameMargin - 5;
-        const currentUrl = typeof window !== 'undefined' ? window.location.href.split('#')[0] + '#menu' : '#menu';
-        
-        doc.setFillColor(0, 0, 0);
-        doc.circle(buttonX + buttonRadius, buttonY - buttonRadius, buttonRadius, 'F');
-        doc.setDrawColor(0, 0, 0);
-        doc.setLineWidth(0.5);
-        doc.circle(buttonX + buttonRadius, buttonY - buttonRadius, buttonRadius, 'S');
-        
-        doc.setFontSize(14);
-        doc.setTextColor(255, 255, 255);
-        doc.setFont('helvetica', 'bold');
-        const arrowText = '←';
-        const arrowWidth = doc.getTextWidth(arrowText);
-        doc.text(arrowText, buttonX + buttonRadius - (arrowWidth / 2), buttonY - buttonRadius + 2);
-        
-        doc.link(buttonX, buttonY - (buttonRadius * 2), buttonRadius * 2, buttonRadius * 2, {
-          url: currentUrl
-        });
-      }
-
-      // Open PDF in browser instead of downloading
+      // Generate PDF blob
       const pdfBlob = doc.output('blob');
+      
+      // Revoke old URL if it exists to prevent memory leaks
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+      }
+      
       const generatedPdfUrl = URL.createObjectURL(pdfBlob);
+      
+      console.log(`=== PDF Generation Complete ===`);
+      console.log(`Total pages: ${totalPages}`);
+      console.log(`PDF URL created: ${generatedPdfUrl.substring(0, 50)}...`);
       
       // On mobile, show PDF in view, on desktop also show in view
       setPdfUrl(generatedPdfUrl);

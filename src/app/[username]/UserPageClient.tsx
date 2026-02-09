@@ -8,6 +8,7 @@ import { getThemeCSSVariables, type ColorTheme, type TemplateStyle } from "@/lib
 import type { User } from "@/types/user";
 import { RestoTemplate } from "@/components/templates/RestoTemplate";
 import { SushiTemplate } from "@/components/templates/SushiTemplate";
+import { ThaiTemplate } from "@/components/templates/ThaiTemplate";
 
 export function UserPageClient() {
   const params = useParams();
@@ -98,6 +99,7 @@ export function UserPageClient() {
   const TemplateComponent = {
     resto: RestoTemplate,
     sushi: SushiTemplate,
+    thai: ThaiTemplate,
   }[templateStyle] || RestoTemplate; // Fallback to RestoTemplate
 
   return (

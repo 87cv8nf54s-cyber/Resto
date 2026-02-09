@@ -337,29 +337,6 @@ export function RestoTemplate({ user }: RestoTemplateProps) {
         );
       }
 
-      // Add "Terug naar interactieve versie" button on first menu page
-      doc.setPage(2);
-      const buttonX = margin + 5;
-      const buttonY = frameMargin - 8;
-      const buttonWidth = 50;
-      const buttonHeight = 8;
-      const currentUrl = typeof window !== 'undefined' ? window.location.href.split('#')[0] + '#menu' : '#menu';
-      
-      // Draw button background
-      doc.setFillColor(100, 100, 255);
-      doc.roundedRect(buttonX, buttonY - buttonHeight, buttonWidth, buttonHeight, 2, 2, 'F');
-      
-      // Add button text with web icon symbol
-      doc.setFontSize(9);
-      doc.setTextColor(255, 255, 255);
-      doc.setFont('helvetica', 'bold');
-      doc.text('🌐 Terug', buttonX + 3, buttonY - 2);
-      
-      // Add clickable link area
-      doc.link(buttonX, buttonY - buttonHeight, buttonWidth, buttonHeight, {
-        url: currentUrl
-      });
-
       // Open PDF in browser instead of downloading
       const pdfBlob = doc.output('blob');
       const generatedPdfUrl = URL.createObjectURL(pdfBlob);

@@ -7,10 +7,11 @@ import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import { RestoTemplate } from '@/components/templates/RestoTemplate';
 import { SushiTemplate } from '@/components/templates/SushiTemplate';
+import { ThaiTemplate } from '@/components/templates/ThaiTemplate';
 import { mockUser } from '../data/mockUser';
 import { getThemeCSSVariables } from '@/lib/themes';
 
-type TemplateType = 'resto' | 'sushi';
+type TemplateType = 'resto' | 'sushi' | 'thai';
 
 export default function TemplatesPage() {
   const [activeTemplate, setActiveTemplate] = useState<TemplateType>('resto');
@@ -37,6 +38,12 @@ export default function TemplatesPage() {
         return (
           <div className="template-sushi" style={style}>
             <SushiTemplate user={mockUser} />
+          </div>
+        );
+      case 'thai':
+        return (
+          <div className="template-thai" style={style}>
+            <ThaiTemplate user={mockUser} />
           </div>
         );
       default:
@@ -164,6 +171,56 @@ export default function TemplatesPage() {
     }
   }, [activeTemplate]);
 
+  // Scroll to menu section when sushi template is selected
+  useEffect(() => {
+    if (activeTemplate === 'sushi') {
+      const scrollToMenu = () => {
+        // Desktop simulator
+        const screenElement = screenRef.current;
+        const contentWrapper = contentWrapperRef.current;
+        
+        if (screenElement && contentWrapper) {
+          const menuElement = contentWrapper.querySelector('#menu');
+          if (menuElement) {
+            const menuRect = menuElement.getBoundingClientRect();
+            const wrapperRect = contentWrapper.getBoundingClientRect();
+            const scrollPosition = menuRect.top - wrapperRect.top + screenElement.scrollTop;
+            
+            setTimeout(() => {
+              screenElement.scrollTo({
+                top: scrollPosition * 0.75, // Account for scale(0.75)
+                behavior: 'smooth'
+              });
+            }, 600);
+          }
+        }
+
+        // Mobile simulator
+        const mobileScreenElement = mobileScreenRef.current;
+        const mobileContentWrapper = mobileContentWrapperRef.current;
+        
+        if (mobileScreenElement && mobileContentWrapper) {
+          const menuElement = mobileContentWrapper.querySelector('#menu');
+          if (menuElement) {
+            const menuRect = menuElement.getBoundingClientRect();
+            const wrapperRect = mobileContentWrapper.getBoundingClientRect();
+            const scrollPosition = menuRect.top - wrapperRect.top + mobileScreenElement.scrollTop;
+            
+            setTimeout(() => {
+              mobileScreenElement.scrollTo({
+                top: scrollPosition,
+                behavior: 'smooth'
+              });
+            }, 600);
+          }
+        }
+      };
+
+      // Wait for content to render before scrolling
+      setTimeout(scrollToMenu, 700);
+    }
+  }, [activeTemplate]);
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-gray-100">
       <Navigation />
@@ -207,6 +264,17 @@ export default function TemplatesPage() {
                 aria-pressed={activeTemplate === 'sushi'}
               >
                 Sushi Template
+              </button>
+              <button
+                onClick={() => setActiveTemplate('thai')}
+                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                  activeTemplate === 'thai'
+                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
+                }`}
+                aria-pressed={activeTemplate === 'thai'}
+              >
+                Thai Template
               </button>
             </div>
           </div>
